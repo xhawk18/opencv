@@ -38,6 +38,13 @@
 
 //--------------------Google Code 2010 -- Yannick Verdie--------------------//
 
+// xh: Do not show QT window by default. 
+// To make a QT window visible, need to call
+//    QWidget *win = static_cast<QWidget *>(cvGetWindowHandle("My Window"));
+//    win->show();
+
+
+
 #include "precomp.hpp"
 
 #if defined(HAVE_QT)
@@ -1097,8 +1104,8 @@ void GuiReceiver::showImage(QString name, void* arr)
         w->updateImage(arr);
     }
 
-    if (w->isHidden())
-        w->show();
+    //if (w->isHidden())
+    //    w->show();
 }
 
 
@@ -1731,7 +1738,7 @@ CvWindow::CvWindow(QString name, int arg2)
         myGlobalLayout->addWidget(myStatusBar, Qt::AlignCenter);
 
     setLayout(myGlobalLayout);
-    show();
+    //show();
 }
 
 
