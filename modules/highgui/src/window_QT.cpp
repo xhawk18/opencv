@@ -103,6 +103,16 @@ inline QPoint wheelEventPos(QWheelEvent *we) {
 #endif
 
 
+thread_local QWidget *g_container;
+
+CV_IMPL void cvSetContainerWindow(void *win) {
+    g_container = static_cast<QWidget *>(win);
+}
+
+CV_IMPL void *cvGetContainerWindow() {
+    return static_cast<void *>(g_container);
+}
+
 //Static and global first
 static GuiReceiver *guiMainThread = NULL;
 static int parameterSystemC = 1;
@@ -441,6 +451,13 @@ CV_IMPL void cvStopLoop()
 static CvWindow* icvFindWindowByName(QString name)
 {
     CvWindow* window = 0;
+
+    QWidget *container = static_cast<QWidget *>(cvGetContainerWindow());
+    if (container != nullptr) {
+        window = container->findChild<CvWindow *>(name);
+        if (window != nullptr)
+            return window;
+    }
 
     //This is not a very clean way to do the stuff. Indeed, QAction automatically generate toolTil (QLabel)
     //that can be grabbed here and crash the code at 'w->param_name==name'.

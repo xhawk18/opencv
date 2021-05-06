@@ -122,6 +122,11 @@ enum
     CV_WINDOW_KEEPRATIO    = 0x00000000//the ration image is respected.
 };
 
+/* set a window as parent container window */
+CVAPI(void) cvSetContainerWindow(void *win);
+/* get the parent container window */
+CVAPI(void*) cvGetContainerWindow(void);
+
 /* create window */
 CVAPI(int) cvNamedWindow( const char* name, int flags CV_DEFAULT(CV_WINDOW_AUTOSIZE) );
 
