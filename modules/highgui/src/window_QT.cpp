@@ -38,6 +38,13 @@
 
 //--------------------Google Code 2010 -- Yannick Verdie--------------------//
 
+// xh: Do not show QT window by default. 
+// To make a QT window visible, need to call
+//    QWidget *win = static_cast<QWidget *>(cvGetWindowHandle("My Window"));
+//    win->show();
+
+
+
 #include "precomp.hpp"
 
 #if defined(HAVE_QT)
@@ -53,6 +60,8 @@
 #else
 #include <unistd.h>
 #endif
+#include <QStyleOption>
+#include <QStyle>
 
 // Get GL_PERSPECTIVE_CORRECTION_HINT definition, not available in GLES 2 or
 // OpenGL 3 core profile or later
@@ -1756,6 +1765,14 @@ CvWindow::~CvWindow()
 {
     if (guiMainThread)
         guiMainThread->isLastWindow();
+}
+
+
+void CvWindow::paintEvent(QPaintEvent *event) {
+    QStyleOption opt;
+    opt.initFrom(this);
+    QPainter qp(this);
+    style()->drawPrimitive(QStyle::PE_Widget, &opt, &qp, this);
 }
 
 

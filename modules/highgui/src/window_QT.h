@@ -64,6 +64,7 @@
 #include <QtConcurrentRun>
 #include <QWaitCondition>
 #include <QKeyEvent>
+#include <QPaintEvent>
 #include <QMetaObject>
 #include <QPointer>
 #include <QSlider>
@@ -342,6 +343,7 @@ public:
 
 protected:
     virtual void keyPressEvent(QKeyEvent* event) CV_OVERRIDE;
+    virtual void paintEvent(QPaintEvent *event) CV_OVERRIDE;
 
 private:
 
