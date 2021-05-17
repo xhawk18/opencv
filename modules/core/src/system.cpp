@@ -1857,7 +1857,7 @@ public:
     {
 #ifdef OPENCV_WITH_ITT
         if (overrideThreadName())
-            __itt_thread_set_name(cv::format("OpenCVThread-%03d", id).c_str());
+            __itt_thread_set_nameA(cv::format("OpenCVThread-%03d", id).c_str());
 #endif
     }
 };

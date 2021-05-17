@@ -217,7 +217,7 @@ static bool isITTEnabled()
             {
                 isEnabled = !!(__itt_api_version());
                 CV_LOG_ITT("ITT is " << (isEnabled ? "enabled" : "disabled"));
-                domain = __itt_domain_create("OpenCVTrace");
+                domain = __itt_domain_create(_T("OpenCVTrace"));
             }
             else
             {
@@ -247,8 +247,8 @@ Region::LocationExtraData::LocationExtraData(const LocationStaticStorage& locati
         // Caching is not required here, because there is builtin cache.
         // https://software.intel.com/en-us/node/544203:
         //     Consecutive calls to __itt_string_handle_create with the same name return the same value.
-        ittHandle_name = __itt_string_handle_create(location.name);
-        ittHandle_filename = __itt_string_handle_create(location.filename);
+        ittHandle_name = __itt_string_handle_createA(location.name);
+        ittHandle_filename = __itt_string_handle_createA(location.filename);
     }
     else
     {
@@ -359,7 +359,7 @@ void Region::Impl::leaveRegion(TraceManagerThreadLocal& ctx)
     {
         if (result.currentSkippedRegions)
         {
-            __itt_metadata_add(domain, itt_id, __itt_string_handle_create("skipped trace entries"), __itt_metadata_u32, 1, &result.currentSkippedRegions);
+            __itt_metadata_add(domain, itt_id, __itt_string_handle_create(_T("skipped trace entries")), __itt_metadata_u32, 1, &result.currentSkippedRegions);
         }
 #ifdef HAVE_IPP
         if (result.durationImplIPP)
@@ -367,7 +367,7 @@ void Region::Impl::leaveRegion(TraceManagerThreadLocal& ctx)
 #endif
 #ifdef HAVE_OPENCL
         if (result.durationImplOpenCL)
-            __itt_metadata_add(domain, itt_id, __itt_string_handle_create("tOpenCL"), __itt_metadata_u64, 1, &result.durationImplOpenCL);
+            __itt_metadata_add(domain, itt_id, __itt_string_handle_create(_T("tOpenCL")), __itt_metadata_u64, 1, &result.durationImplOpenCL);
 #endif
 #ifdef HAVE_OPENVX
         if (result.durationImplOpenVX)
@@ -859,7 +859,7 @@ TraceManager::TraceManager()
     if (isITTEnabled())
     {
         activated = true; // force trace pipeline activation (without OpenCV storage)
-        __itt_region_begin(domain, __itt_null, __itt_null, __itt_string_handle_create("OpenCVTrace"));
+        __itt_region_begin(domain, __itt_null, __itt_null, __itt_string_handle_create(_T("OpenCVTrace")));
     }
 #endif
 }
@@ -1049,7 +1049,7 @@ struct TraceArg::ExtraData
             // Caching is not required here, because there is builtin cache.
             // https://software.intel.com/en-us/node/544203:
             //     Consecutive calls to __itt_string_handle_create with the same name return the same value.
-            ittHandle_name = __itt_string_handle_create(arg.name);
+            ittHandle_name = __itt_string_handle_createA(arg.name);
         }
         else
         {
@@ -1084,7 +1084,7 @@ void traceArg(const TraceArg& arg, const char* value)
 #ifdef OPENCV_WITH_ITT
     if (isITTEnabled())
     {
-        __itt_metadata_str_add(domain, region->pImpl->itt_id, (*arg.ppExtra)->ittHandle_name, value, strlen(value));
+        __itt_metadata_str_addA(domain, region->pImpl->itt_id, (*arg.ppExtra)->ittHandle_name, value, strlen(value));
     }
 #endif
 }
